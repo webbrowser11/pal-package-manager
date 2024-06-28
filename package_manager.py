@@ -1,7 +1,5 @@
 import json
 import os
-import subprocess
-import sys
 import requests
 import zipfile
 import tempfile
@@ -60,7 +58,7 @@ def list_packages():
     for package, url in config["installed_packages"].items():
         print(f"{package}: {url}")
 
-if __name__ == "__main__":
+def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Simple GitHub package manager.")
@@ -77,3 +75,6 @@ if __name__ == "__main__":
         list_packages()
     else:
         parser.print_help()
+
+if __name__ == "__main__":
+    main()
