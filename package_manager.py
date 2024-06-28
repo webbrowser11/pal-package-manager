@@ -64,16 +64,16 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Simple GitHub package manager.")
-    parser.add_argument('command', choices=['install', 'uninstall', 'list'])
+    parser.add_argument('pal', choices=['install', 'uninstall', 'list'])
     parser.add_argument('package', nargs='?', help='Package to install/uninstall')
 
     args = parser.parse_args()
 
-    if args.command == 'install' and args.package:
+    if args.pal == 'install' and args.package:
         install_package(args.package)
-    elif args.command == 'uninstall' and args.package:
+    elif args.pal == 'uninstall' and args.package:
         uninstall_package(args.package)
-    elif args.command == 'list':
+    elif args.pal == 'list':
         list_packages()
     else:
         parser.print_help()
