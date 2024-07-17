@@ -1,6 +1,8 @@
 import os
-import subprocess
 import argparse
+import urllib.request
+import zipfile
+from io import BytesIO
 
 # Function to install the repository if it has "PAL" in the name
 def install_repo(repo_url):
@@ -14,13 +16,26 @@ def install_repo(repo_url):
     if not os.path.exists(".apps"):
         os.makedirs(".apps")
 
-    # Define the path where the repo will be cloned
-    clone_path = os.path.join(".apps", repo_name)
+    # Define the path where the repo will be extracted
+    extract_path = os.path.join(".apps", repo_name)
 
-    # Clone the repo into the .apps directory
-    subprocess.run(["git", "clone", repo_url, clone_path])
+    # Construct the URL for the ZIP file
+    zip_url = f"{repo_url}/archive/refs/heads/main.zip"
 
-    print(f"Installed {repo_name} to .apps/{repo_name}")
+    try:
+        # Download the ZIP file
+        with urllib.request.urlopen(zip_url) as response:
+            zip_data = response.read()
+
+        # Extract the ZIP file
+        with zipfile.ZipFile(BytesIO(zip_data)) as z:
+            z.extractall(extract_path)
+
+        print(f"Installed {repo_name} to .apps/{repo_name}")
+    except urllib.error.URLError as e:
+        print(f"Error: Failed to download the repository. {e}")
+    except zipfile.BadZipFile as e:
+        print(f"Error: Failed to extract the repository. {e}")
 
 # Main function to handle command-line arguments
 def main():
