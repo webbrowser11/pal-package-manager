@@ -4,20 +4,20 @@ import urllib.request
 import zipfile
 from io import BytesIO
 
-# Function to install the repository if it has "PAL" in the name
+# Function to install the repository if it has "PAL" or "pal" in the name
 def install_repo(repo_url):
     repo_name = repo_url.split("/")[-1]
 
-    if "PAL" not in repo_name:
+    if "PAL" not in repo_name.upper():
         print("Error: Repository name must contain 'PAL'.")
         return
 
-    # Create .apps directory if it doesn't exist
-    if not os.path.exists(".apps"):
-        os.makedirs(".apps")
+    # Create apps directory if it doesn't exist
+    if not os.path.exists("apps"):
+        os.makedirs("apps")
 
     # Define the path where the repo will be extracted
-    extract_path = os.path.join(".apps", repo_name)
+    extract_path = os.path.join("apps", repo_name)
 
     # Construct the URL for the ZIP file
     zip_url = f"{repo_url}/archive/refs/heads/main.zip"
@@ -31,7 +31,7 @@ def install_repo(repo_url):
         with zipfile.ZipFile(BytesIO(zip_data)) as z:
             z.extractall(extract_path)
 
-        print(f"Installed {repo_name} to .apps/{repo_name}")
+        print(f"Installed {repo_name} to apps/{repo_name}")
     except urllib.error.URLError as e:
         print(f"Error: Failed to download the repository. {e}")
     except zipfile.BadZipFile as e:
